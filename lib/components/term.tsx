@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import {clipboard, shell} from 'electron';
 import React from 'react';
 
@@ -205,6 +206,7 @@ export default class Term extends React.PureComponent<
       }
       Term.reportRenderer(props.uid, useWebGL ? 'WebGL' : 'Canvas');
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const shallActivateWebLink = (event: MouseEvent): boolean => {
         if (!event) return false;
         return props.webLinksActivationKey ? event[`${props.webLinksActivationKey}Key`] : true;
@@ -216,7 +218,13 @@ export default class Term extends React.PureComponent<
       this.term.loadAddon(this.searchAddon);
       this.term.loadAddon(
         new WebLinksAddon((event, uri) => {
-          if (shallActivateWebLink(event)) void shell.openExternal(uri);
+          // if (shallActivateWebLink(event)) void shell.openExternal(uri);
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          (window as any).store.dispatch({
+            type: 'SESSION_URL_SET',
+            uid: props.uid,
+            url: uri
+          });
         })
       );
       this.term.open(this.termRef);
@@ -510,46 +518,99 @@ export default class Term extends React.PureComponent<
     });
   }
 
+  // <webview
+  //   src={this.props.url}
+  //   style={{
+  //     background: 'transparent',
+  //     position: 'absolute',
+  //     top: 0,
+  //     left: 0,
+  //     display: 'inline-flex',
+  //     width: '100%',
+  //     height: '100%'
+  //   }}
+  // />
+  //  webview works great
+  //
+  //
+  // ifrem js disabled!!
+  //
+  //
+  //   <iframe
+  //   src={this.props.url}
+  //   style={{
+  //     background: 'transparent',
+  //     position: 'absolute',
+  //     top: 0,
+  //     left: 0,
+  //     display: 'inline-flex',
+  //     width: '100%',
+  //     height: '100%'
+  //   }}
+  // ></iframe>
+  //
+  //
+  //
+  // $0.openDevTools() in hyper's devtool console can load webview correctly!!!
+
   render() {
     return (
       <div className={`term_fit ${this.props.isTermActive ? 'term_active' : ''}`} onMouseUp={this.onMouseUp}>
-        {this.props.customChildrenBefore}
-        <div ref={this.onTermWrapperRef} className="term_fit term_wrapper" />
-        {this.props.customChildren}
-        {this.props.search ? (
-          <SearchBox
-            next={this.searchNext}
-            prev={this.searchPrevious}
-            close={this.closeSearchBox}
-            caseSensitive={this.state.searchOptions.caseSensitive}
-            wholeWord={this.state.searchOptions.wholeWord}
-            regex={this.state.searchOptions.regex}
-            results={this.state.searchResults}
-            toggleCaseSensitive={() =>
-              this.setState({
-                ...this.state,
-                searchOptions: {...this.state.searchOptions, caseSensitive: !this.state.searchOptions.caseSensitive}
-              })
-            }
-            toggleWholeWord={() =>
-              this.setState({
-                ...this.state,
-                searchOptions: {...this.state.searchOptions, wholeWord: !this.state.searchOptions.wholeWord}
-              })
-            }
-            toggleRegex={() =>
-              this.setState({
-                ...this.state,
-                searchOptions: {...this.state.searchOptions, regex: !this.state.searchOptions.regex}
-              })
-            }
-            selectionColor={this.props.selectionColor}
-            backgroundColor={this.props.backgroundColor}
-            foregroundColor={this.props.foregroundColor}
-            borderColor={this.props.borderColor}
-            font={this.props.uiFontFamily}
+        {this.props.url ? (
+          <webview
+            id={'vwdbg'}
+            src={this.props.url}
+            style={{
+              background: 'transparent',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              display: 'inline-flex',
+              width: '100%',
+              height: '100%'
+            }}
           />
-        ) : null}
+        ) : (
+          <>
+            {this.props.customChildrenBefore}
+            <div ref={this.onTermWrapperRef} className="term_fit term_wrapper" />
+            {this.props.customChildren}
+            {this.props.search ? (
+              <SearchBox
+                next={this.searchNext}
+                prev={this.searchPrevious}
+                close={this.closeSearchBox}
+                caseSensitive={this.state.searchOptions.caseSensitive}
+                wholeWord={this.state.searchOptions.wholeWord}
+                regex={this.state.searchOptions.regex}
+                results={this.state.searchResults}
+                toggleCaseSensitive={() =>
+                  this.setState({
+                    ...this.state,
+                    searchOptions: {...this.state.searchOptions, caseSensitive: !this.state.searchOptions.caseSensitive}
+                  })
+                }
+                toggleWholeWord={() =>
+                  this.setState({
+                    ...this.state,
+                    searchOptions: {...this.state.searchOptions, wholeWord: !this.state.searchOptions.wholeWord}
+                  })
+                }
+                toggleRegex={() =>
+                  this.setState({
+                    ...this.state,
+                    searchOptions: {...this.state.searchOptions, regex: !this.state.searchOptions.regex}
+                  })
+                }
+                selectionColor={this.props.selectionColor}
+                backgroundColor={this.props.backgroundColor}
+                foregroundColor={this.props.foregroundColor}
+                borderColor={this.props.borderColor}
+                font={this.props.uiFontFamily}
+              />
+            ) : null}
+          </>
+        )}
 
         <style jsx global>{`
           .term_fit {

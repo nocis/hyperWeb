@@ -38,16 +38,18 @@ export function newWindow(
   const winOpts: BrowserWindowConstructorOptions = {
     minWidth: 370,
     minHeight: 190,
+    // backgroundColor: toElectronBackgroundColor('rgba(0, 0, 0, 0.3)' || '#000'),
     backgroundColor: toElectronBackgroundColor(cfg.backgroundColor || '#000'),
     titleBarStyle: 'hiddenInset',
     title: 'Hyper.app',
     // we want to go frameless on Windows and Linux
     frame: process.platform === 'darwin',
-    transparent: process.platform === 'darwin',
+    transparent: true,
     icon,
     show: Boolean(process.env.HYPER_DEBUG || process.env.HYPERTERM_DEBUG || isDev),
     acceptFirstMouse: true,
     webPreferences: {
+      webviewTag: true,
       nodeIntegration: true,
       navigateOnDragDrop: true,
       contextIsolation: false

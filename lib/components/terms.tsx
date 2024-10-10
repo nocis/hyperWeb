@@ -144,7 +144,7 @@ export default class Terms extends React.Component<React.PropsWithChildren<Terms
         <style jsx>{`
           .terms_terms {
             position: absolute;
-            margin-top: 34px;
+            /* margin-top: 34px; */
             top: 0;
             right: 0;
             left: 0;
@@ -158,7 +158,8 @@ export default class Terms extends React.Component<React.PropsWithChildren<Terms
           }
 
           .terms_termsNotShifted {
-            margin-top: 34px;
+            position: absolute;
+            margin-top: 1px;
             animation: shift-up 0.3s ease;
           }
 

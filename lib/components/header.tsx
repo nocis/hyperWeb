@@ -62,7 +62,8 @@ const Header = forwardRef<HTMLElement, HeaderProps>((props, ref) => {
 
     const defaults = {
       hambMenu: !props.isMac, // show by default on windows and linux
-      winCtrls: !props.isMac // show by default on Windows and Linux
+      winCtrls: !props.isMac, // show by default on Windows and Linux
+      showHeader: false
     };
 
     // don't allow the user to change defaults on macOS
@@ -72,7 +73,8 @@ const Header = forwardRef<HTMLElement, HeaderProps>((props, ref) => {
 
     return {
       hambMenu: showHamburgerMenu === '' ? defaults.hambMenu : showHamburgerMenu,
-      winCtrls: showWindowControls === '' ? defaults.winCtrls : showWindowControls
+      winCtrls: showWindowControls === '' ? defaults.winCtrls : showWindowControls,
+      showHeader: defaults.showHeader
     };
   };
 
@@ -83,175 +85,182 @@ const Header = forwardRef<HTMLElement, HeaderProps>((props, ref) => {
     // if there's only one tab we use its title as the window title
     title = props.tabs[0].title;
   }
-  const {hambMenu, winCtrls} = getWindowHeaderConfig();
+  const {hambMenu, winCtrls, showHeader} = getWindowHeaderConfig();
   const left = winCtrls === 'left';
   const maxButtonHref = props.maximized
     ? './renderer/assets/icons.svg#restore-window'
     : './renderer/assets/icons.svg#maximize-window';
 
   return (
-    <header
-      className={`header_header ${isMac && 'header_headerRounded'}`}
-      onMouseDown={handleHeaderMouseDown}
-      onMouseUp={() => window.focusActiveTerm()}
-      onDoubleClick={handleMaximizeClick}
-      ref={ref}
-    >
-      {!isMac && (
-        <div
-          className={`header_windowHeader ${props.tabs.length > 1 ? 'header_windowHeaderWithBorder' : ''}`}
-          style={{borderColor}}
+    <>
+      {
+        <header
+          className={`header_header ${isMac && 'header_headerRounded'}`}
+          onMouseDown={handleHeaderMouseDown}
+          onMouseUp={() => window.focusActiveTerm()}
+          onDoubleClick={handleMaximizeClick}
+          ref={ref}
         >
-          {hambMenu && (
-            <svg
-              className={`header_shape ${left ? 'header_hamburgerMenuRight' : 'header_hamburgerMenuLeft'}`}
-              onClick={handleHamburgerMenuClick}
+          {!isMac && (
+            <div
+              className={`header_windowHeader ${props.tabs.length > 1 ? 'header_windowHeaderWithBorder' : ''}`}
+              style={{borderColor}}
             >
-              <use xlinkHref="./renderer/assets/icons.svg#hamburger-menu" />
-            </svg>
-          )}
-          <span className="header_appTitle">{title}</span>
-          {winCtrls && (
-            <div className={`header_windowControls ${left ? 'header_windowControlsLeft' : ''}`}>
-              <div className={`${left ? 'header_minimizeWindowLeft' : ''}`} onClick={handleMinimizeClick}>
-                <svg className="header_shape">
-                  <use xlinkHref="./renderer/assets/icons.svg#minimize-window" />
+              {showHeader && hambMenu && (
+                <svg
+                  className={`header_shape ${left ? 'header_hamburgerMenuRight' : 'header_hamburgerMenuLeft'}`}
+                  onClick={handleHamburgerMenuClick}
+                >
+                  <use xlinkHref="./renderer/assets/icons.svg#hamburger-menu" />
                 </svg>
-              </div>
-              <div className={`${left ? 'header_maximizeWindowLeft' : ''}`} onClick={handleMaximizeClick}>
-                <svg className="header_shape">
-                  <use xlinkHref={maxButtonHref} />
-                </svg>
-              </div>
-              <div className={`header_closeWindow ${left ? 'header_closeWindowLeft' : ''}`} onClick={handleCloseClick}>
-                <svg className="header_shape">
-                  <use xlinkHref="./renderer/assets/icons.svg#close-window" />
-                </svg>
-              </div>
+              )}
+              {showHeader && <span className="header_appTitle">{title}</span>}
+              {showHeader && winCtrls && (
+                <div className={`header_windowControls ${left ? 'header_windowControlsLeft' : ''}`}>
+                  <div className={`${left ? 'header_minimizeWindowLeft' : ''}`} onClick={handleMinimizeClick}>
+                    <svg className="header_shape">
+                      <use xlinkHref="./renderer/assets/icons.svg#minimize-window" />
+                    </svg>
+                  </div>
+                  <div className={`${left ? 'header_maximizeWindowLeft' : ''}`} onClick={handleMaximizeClick}>
+                    <svg className="header_shape">
+                      <use xlinkHref={maxButtonHref} />
+                    </svg>
+                  </div>
+                  <div
+                    className={`header_closeWindow ${left ? 'header_closeWindowLeft' : ''}`}
+                    onClick={handleCloseClick}
+                  >
+                    <svg className="header_shape">
+                      <use xlinkHref="./renderer/assets/icons.svg#close-window" />
+                    </svg>
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
-      )}
-      {props.customChildrenBefore}
-      <Tabs
-        {...getTabsProps(props, {
-          tabs: props.tabs,
-          borderColor: props.borderColor,
-          backgroundColor: props.backgroundColor,
-          onClose: props.onCloseTab,
-          onChange: onChangeIntent,
-          fullScreen: props.fullScreen,
-          defaultProfile: props.defaultProfile,
-          profiles: props.profiles.asMutable({deep: true}),
-          openNewTab: props.openNewTab
-        })}
-      />
-      {props.customChildren}
+          {props.customChildrenBefore}
+          <Tabs
+            {...getTabsProps(props, {
+              tabs: props.tabs,
+              borderColor: props.borderColor,
+              backgroundColor: props.backgroundColor,
+              onClose: props.onCloseTab,
+              onChange: onChangeIntent,
+              fullScreen: props.fullScreen,
+              defaultProfile: props.defaultProfile,
+              profiles: props.profiles.asMutable({deep: true}),
+              openNewTab: props.openNewTab
+            })}
+          />
+          {props.customChildren}
 
-      <style jsx>{`
-        .header_header {
-          position: fixed;
-          top: 1px;
-          left: 1px;
-          right: 1px;
-          z-index: 100;
-        }
+          <style jsx>{`
+            .header_header {
+              position: fixed;
+              top: 1px;
+              left: 1px;
+              right: 1px;
+              z-index: 100;
+            }
 
-        .header_headerRounded {
-          border-top-left-radius: 4px;
-          border-top-right-radius: 4px;
-        }
+            .header_headerRounded {
+              border-top-left-radius: 4px;
+              border-top-right-radius: 4px;
+            }
 
-        .header_windowHeader {
-          height: 34px;
-          width: 100%;
-          position: fixed;
-          top: 1px;
-          left: 1px;
-          right: 1px;
-          -webkit-app-region: drag;
-          -webkit-user-select: none;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+            .header_windowHeader {
+              height: ${showHeader ? '34px' : '7px'};
+              width: 100%;
+              position: fixed;
+              top: 1px;
+              left: 1px;
+              right: 1px;
+              -webkit-app-region: drag;
+              -webkit-user-select: none;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
 
-        .header_windowHeaderWithBorder {
-          border-color: #ccc;
-          border-bottom-style: solid;
-          border-bottom-width: 1px;
-        }
+            .header_windowHeaderWithBorder {
+              border-color: #ccc;
+              border-bottom-style: solid;
+              border-bottom-width: 1px;
+            }
 
-        .header_appTitle {
-          font-size: 12px;
-        }
+            .header_appTitle {
+              font-size: 12px;
+            }
 
-        .header_shape,
-        .header_shape > svg {
-          width: 40px;
-          height: 34px;
-          padding: 12px 15px 12px 15px;
-          -webkit-app-region: no-drag;
-          color: #fff;
-          opacity: 0.5;
-          shape-rendering: crispEdges;
-        }
+            .header_shape,
+            .header_shape > svg {
+              width: 40px;
+              height: 34px;
+              padding: 12px 15px 12px 15px;
+              -webkit-app-region: no-drag;
+              color: #fff;
+              opacity: 0.5;
+              shape-rendering: crispEdges;
+            }
 
-        .header_shape:hover {
-          opacity: 1;
-        }
+            .header_shape:hover {
+              opacity: 1;
+            }
 
-        .header_shape:active {
-          opacity: 0.3;
-        }
+            .header_shape:active {
+              opacity: 0.3;
+            }
 
-        .header_hamburgerMenuLeft {
-          position: fixed;
-          top: 0;
-          left: 0;
-        }
+            .header_hamburgerMenuLeft {
+              position: fixed;
+              top: 0;
+              left: 0;
+            }
 
-        .header_hamburgerMenuRight {
-          position: fixed;
-          top: 0;
-          right: 0;
-        }
+            .header_hamburgerMenuRight {
+              position: fixed;
+              top: 0;
+              right: 0;
+            }
 
-        .header_windowControls {
-          display: flex;
-          width: 120px;
-          height: 34px;
-          justify-content: space-between;
-          position: fixed;
-          top: 0;
-          right: 0;
-        }
+            .header_windowControls {
+              display: flex;
+              width: 120px;
+              height: 34px;
+              justify-content: space-between;
+              position: fixed;
+              top: 0;
+              right: 0;
+            }
 
-        .header_windowControlsLeft {
-          left: 0px;
-        }
+            .header_windowControlsLeft {
+              left: 0px;
+            }
 
-        .header_closeWindowLeft {
-          order: 1;
-        }
+            .header_closeWindowLeft {
+              order: 1;
+            }
 
-        .header_minimizeWindowLeft {
-          order: 2;
-        }
+            .header_minimizeWindowLeft {
+              order: 2;
+            }
 
-        .header_maximizeWindowLeft {
-          order: 3;
-        }
+            .header_maximizeWindowLeft {
+              order: 3;
+            }
 
-        .header_closeWindow:hover {
-          color: #fe354e;
-        }
+            .header_closeWindow:hover {
+              color: #fe354e;
+            }
 
-        .header_closeWindow:active {
-          color: #fe354e;
-        }
-      `}</style>
-    </header>
+            .header_closeWindow:active {
+              color: #fe354e;
+            }
+          `}</style>
+        </header>
+      }
+    </>
   );
 });
 
