@@ -114,3 +114,5 @@ If you have issues in the `codesign` step when running `yarn run dist` on macOS,
 - [Sample Extension](https://github.com/vercel/hyperpower)
 - [Sample Theme](https://github.com/vercel/hyperyellow)
 - [Awesome Hyper](https://github.com/bnb/awesome-hyper)
+
+  devtools: document.getElementsByTagName('webview')[0].openDevTools()
