@@ -127,4 +127,7 @@ If you have issues in the `codesign` step when running `yarn run dist` on macOS,
 
   nvm install 20
   
-  npm install node-abi@3.78.0 -g
+  npm install node-abi@3.78.0 -g (with "resolutions": {
+    "@types/retry": "0.12.5",
+    "node-abi": "^3.67.0"
+  }, in package.json)
