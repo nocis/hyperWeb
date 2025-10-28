@@ -116,5 +116,13 @@ If you have issues in the `codesign` step when running `yarn run dist` on macOS,
 - [Awesome Hyper](https://github.com/bnb/awesome-hyper)
 
   ~/.config/Hyper/hyper.json
+  
   devtools: document.getElementsByTagName('webview')[0].openDevTools()
+
+  For build:
+  
   docker run -it --mount type=bind,source=./build,target=/build ubuntu:24.04
+
+  apt install libglib2.0-dev python3 python3-setuptools git curl
+  
+  npm install node-abi@3.78.0
