@@ -123,6 +123,6 @@ If you have issues in the `codesign` step when running `yarn run dist` on macOS,
   
   docker run -it --mount type=bind,source=./build,target=/build ubuntu:24.04
 
-  apt install libglib2.0-dev python3 python3-setuptools git curl
+  apt install libglib2.0-dev python3 python3-setuptools rpm git curl
   
   npm install node-abi@3.78.0
