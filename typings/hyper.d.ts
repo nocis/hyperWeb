@@ -122,6 +122,7 @@ export type session = {
   shell: string | null;
   title: string;
   uid: string;
+  url: string | null;
   splitDirection?: 'HORIZONTAL' | 'VERTICAL';
   activeUid?: string;
   profile: string;
@@ -397,6 +398,7 @@ export type TermProps = {
   webLinksActivationKey: 'ctrl' | 'alt' | 'meta' | 'shift' | '';
   windowsPty?: IWindowsPty;
   ref_: (uid: string, term: Term | null) => void;
+  url: string | null;
 } & extensionProps;
 
 // Utility types

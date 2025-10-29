@@ -90,6 +90,7 @@ class TermGroup_ extends React.PureComponent<TermGroupProps> {
       cols: session.cols,
       rows: session.rows,
       copyOnSelect: this.props.copyOnSelect,
+      url: session.url,
       bell: this.props.bell,
       bellSoundURL: this.props.bellSoundURL,
       bellSound: this.props.bellSound,
