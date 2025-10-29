@@ -132,4 +132,4 @@ If you have issues in the `codesign` step when running `yarn run dist` on macOS,
     "node-abi": "^3.78.0"
   }, in package.json)
 
-  remove yarn.lock
+  remove yarn.lock app/yarn.lock + yarn in app/ then projectroot/ for both yarn.lock
