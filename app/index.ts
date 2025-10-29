@@ -143,6 +143,10 @@ app.on('ready', () =>
         windowSet.add(hwin);
         void hwin.loadURL(url);
 
+        hwin.once('ready-to-show', () => {
+          hwin.show();
+        });
+
         // the window can be closed by the browser process itself
         hwin.on('close', () => {
           hwin.clean();

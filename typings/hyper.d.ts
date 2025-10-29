@@ -1,6 +1,6 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable import/order */
-import type {Immutable} from 'seamless-immutable';
+import type {Immutable, ImmutableDate} from 'seamless-immutable';
 import type Client from '../lib/utils/rpc';
 
 declare global {
@@ -41,7 +41,7 @@ export type ITermState = Immutable<{
 }>;
 
 export type cursorShapes = 'BEAM' | 'UNDERLINE' | 'BLOCK';
-import type {FontWeight, IWindowsPty, Terminal} from 'xterm';
+import type {FontWeight, IWindowsPty, Terminal} from '@xterm/xterm';
 import type {ColorMap, configOptions} from './config';
 
 export type uiState = Immutable<{
@@ -118,7 +118,7 @@ export type session = {
   pid: number | null;
   resizeAt?: number;
   rows: number | null;
-  search: boolean;
+  search: ImmutableDate | null;
   shell: string | null;
   title: string;
   uid: string;
@@ -230,6 +230,7 @@ export type TabProps = {
   onClose: () => void;
   onSelect: () => void;
   text: string;
+  lastFocused: Date | undefined;
 } & extensionProps;
 
 export type ITab = {
@@ -325,6 +326,7 @@ import type {TermGroupConnectedProps} from '../lib/components/term-group';
 export type TermGroupProps = TermGroupConnectedProps & TermGroupOwnProps;
 
 export type SearchBoxProps = {
+  dateFocused: ImmutableDate | null;
   caseSensitive: boolean;
   wholeWord: boolean;
   regex: boolean;
@@ -342,8 +344,8 @@ export type SearchBoxProps = {
   font: string;
 };
 
-import type {FitAddon} from 'xterm-addon-fit';
-import type {SearchAddon} from 'xterm-addon-search';
+import type {FitAddon} from '@xterm/addon-fit';
+import type {SearchAddon} from '@xterm/addon-search';
 export type TermProps = {
   backgroundColor: string;
   bell: 'SOUND' | false;
@@ -385,7 +387,7 @@ export type TermProps = {
   rows: number | null;
   screenReaderMode: boolean;
   scrollback: number;
-  search: boolean;
+  search: ImmutableDate | null;
   searchAddon: SearchAddon | null;
   selectionColor: string;
   term: Terminal | null;

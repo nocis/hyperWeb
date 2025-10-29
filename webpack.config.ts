@@ -58,10 +58,10 @@ const config: webpack.Configuration[] = [
           {
             from: './app/static',
             to: './static'
-          },
+          /* },
           {
             from: './app/patches',
-            to: './patches'
+            to: './patches' */
           }
         ]
       })
@@ -73,6 +73,10 @@ const config: webpack.Configuration[] = [
     mode: 'none',
     name: 'hyper',
     resolve: {
+      alias: {
+        react: path.resolve(__dirname, 'node_modules/react'),
+        'react-dom': path.resolve(__dirname, 'node_modules/react-dom')
+      },
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts']
     },
     devtool: isProd ? 'hidden-source-map' : 'cheap-module-source-map',
@@ -100,7 +104,7 @@ const config: webpack.Configuration[] = [
       ]
     },
     externals: {
-      'color-convert': 'require("./node_modules/color-convert/index.js")',
+      /* 'color-convert': 'require("./node_modules/color-convert/index.js")',
       'color-string': 'require("./node_modules/color-string/index.js")',
       columnify: 'require("./node_modules/columnify/columnify.js")',
       lodash: 'require("./node_modules/lodash/lodash.js")',
@@ -127,7 +131,7 @@ const config: webpack.Configuration[] = [
       'xterm-addon-web-links': 'require("./node_modules/xterm-addon-web-links/lib/xterm-addon-web-links.js")',
       'xterm-addon-webgl': 'require("./node_modules/xterm-addon-webgl/lib/xterm-addon-webgl.js")',
       'xterm-addon-canvas': 'require("./node_modules/xterm-addon-canvas/lib/xterm-addon-canvas.js")',
-      xterm: 'require("./node_modules/xterm/lib/xterm.js")'
+      xterm: 'require("./node_modules/xterm/lib/xterm.js")' */
     },
     plugins: [
       new webpack.IgnorePlugin({resourceRegExp: /.*\.js.map$/i}),

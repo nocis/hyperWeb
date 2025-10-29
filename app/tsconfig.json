@@ -10,5 +10,9 @@
     "./package.json",
     "../typings/extend-electron.d.ts",
     "../typings/ext-modules.d.ts"
+  ],
+  "exclude": [
+    "../dist/**/*",
+    "../target/**/*"
   ]
 }
